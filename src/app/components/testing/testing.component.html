@@ -18,6 +18,8 @@
 <div class="jobs-row">
       <div class="job-box" *ngFor="let item of jobsList | slice:(currentPage - 1) * itemsPerPage:currentPage * itemsPerPage">
         <h3>{{ item.jobTitle }}</h3>
+
+        <h4>{{item.jobId}}</h4>
         <p><span style="color: rgb(8, 8, 8); font-weight: 600;">Company: </span> {{ item.companyName }}</p>
         <p><span style="color: rgb(8, 8, 8); font-weight: 600;">Experience: </span> {{ item.experience }}</p>
         <p><span style="color: rgb(8, 8, 8); font-weight: 600;">Skills: </span>{{ item.skills }}</p>
@@ -25,11 +27,10 @@
         <p><span style="color: rgb(8, 8, 8); font-weight: 600;">Location: </span>{{ item.location }}</p>
         <p><span style="color: rgb(8, 8, 8); font-weight: 600;">Job Description: </span> {{ item.jobDescription }}</p>
         <p>
-          <button id="uploadBtn" (click)="openUploadPopup(item.jobId)" style="margin-right: 3px;" class="btn btn-secondary highlight-button">Upload Resume</button>
-          <button *ngIf="!item.isApplied" (click)="apply(item)" class="btn btn-primary highlight-button">Apply</button>
-          <span *ngIf="item.isApplied" class="btn btn-success">Applied</span>
+          <button id="uploadBtn" (click)="showUploadPopup(item.jobId)" style="margin-right: 3px;" class="btn btn-secondary highlight-button">Upload Resume</button>
+       
         </p>
-        <button (click)="downloadResume(item.jobId)" class="btn btn-primary highlight-button">Download Resume</button>
+        <button  class="btn btn-primary highlight-button">Download Resume</button>
         
    
         
@@ -56,17 +57,17 @@
     </div>
   </div>
  
-  <div id="uploadPopup" class="popup" [ngClass]="{ 'active': showUploadPopupFlag }">
+  <div id="uploadPopup" class="popup" >
     <div class="popup-content upload">
       <h3 class="head">Upload Your Resume</h3>
       <h3>NAME</h3>
-      <input type="text" placeholder="ENTER NAME" name="name" [(ngModel)]="resumeData.name">
+      <input type="text" placeholder="ENTER NAME" name="name">
       <h3>Email</h3>
-      <input type="text" placeholder="ENTER Email" name="email" [(ngModel)]="resumeData.email">
-      <input type="file" (change)="onFileSelected($event)">
+      <input type="text" placeholder="ENTER Email" name="email" >
+      <input type="file">
       <div class="popup-buttons">
-        <button class="button" (click)="cancelUpload()">Cancel</button>
-        <button class="savebtn"(click)="uploadResume()">Save</button>
+        <button class="button" cancelUpload()>Cancel</button>
+        <button class="savebtn" (click)="uploadResume()">Save</button>
       
      
       </div>

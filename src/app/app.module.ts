@@ -20,6 +20,8 @@ import { AppJobsComponent } from './components/app-jobs/app-jobs.component';
 import { AppAppliedComponent } from './components/app-applied/app-applied.component';
 import { AppHomeComponent } from './components/app-home/app-home.component';
 import { ClientHomeComponent } from './components/client-home/client-home.component';
+import { TestingComponent } from './components/testing/testing.component';
+import { SeperateComponent } from './seperate/seperate.component';
 
 
 
@@ -44,6 +46,8 @@ import { ClientHomeComponent } from './components/client-home/client-home.compon
     AppAppliedComponent,
     AppHomeComponent,
     ClientHomeComponent,
+    TestingComponent,
+    SeperateComponent,
    
     
    

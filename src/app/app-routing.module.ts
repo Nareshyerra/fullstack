@@ -14,6 +14,8 @@ import { AppAppliedComponent } from './components/app-applied/app-applied.compon
 import { AppDashboardComponent } from './components/app-dashboard/app-dashboard.component';
 import { AppHomeComponent } from './components/app-home/app-home.component';
 import { ClientHomeComponent } from './components/client-home/client-home.component';
+import { TestingComponent } from './components/testing/testing.component';
+import { SeperateComponent } from './seperate/seperate.component';
 
 
 
@@ -31,6 +33,9 @@ const routes: Routes = [
     {path: 'jobspage', component:AppJobsComponent},
     { path: 'app-applied', component: AppAppliedComponent },
     {path:'app-home', component:AppHomeComponent},
+    {path:'test', component:TestingComponent},
+    {path:'sep', component:SeperateComponent},
+
   ]},
   {path:'signup', component:SignupComponent},
   {path:'app-signup', component:AppSignupComponent},

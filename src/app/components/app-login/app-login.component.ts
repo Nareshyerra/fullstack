@@ -54,7 +54,8 @@ export class AppLoginComponent implements OnInit {
           this.router.navigate(['app-dashboard'])
         },
         error: (err) => {
-          this.toast.error({detail:"ERROR", summary:"Something went wrong!", duration: 5000});
+          const errorMessage = err.error.message; // Get the error message from the response object
+          this.toast.error({ detail: "ERROR", summary: errorMessage, duration: 5000 }); // Display the actual error message
           console.log(err);
         },
       });

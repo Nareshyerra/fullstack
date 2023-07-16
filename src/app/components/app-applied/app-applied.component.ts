@@ -69,4 +69,8 @@ generatePageNumbers() {
 }
 
   
+getresumesbyid="https://localhost:7058/api/Resumes/1";
+
+
+
 }

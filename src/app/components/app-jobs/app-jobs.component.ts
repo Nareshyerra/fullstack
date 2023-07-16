@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AppliedJobsService } from 'src/app/applied-jobs.service';
 import { JobsdetailsService } from 'src/app/jobsdetails.service';
@@ -17,9 +17,18 @@ export class AppJobsComponent implements OnInit {
   
   
   displayedJobsList: any[] = [];
+
   
-id:any;
+  // jobId!: string; 
+  jobId!: number;
+
   showUploadPopupFlag: boolean = false;
+ 
+  resumeData: any = {}; // Object to store resume data
+  
+
+
+ 
   constructor(private jobsint:JobsdetailsService, private appliedJobsService: AppliedJobsService, private http: HttpClient) { 
     this.totalPages = Math.ceil(this.jobsList.length / this.itemsPerPage);
     this.generatePageNumbers();
@@ -90,8 +99,8 @@ id:any;
       response => {
         console.log('Applied for the job:', response);
         alert("Job applied success")
-      
-         item.applied=true
+        console.log(response);
+         item.isApplied=true
   
         
        
@@ -100,83 +109,65 @@ id:any;
 
        }
       
-
-
-
-
-       showUploadPopup() {
-        this.showUploadPopupFlag = true;
-      }
-    
-      cancelUploadPopup() {
+       cancelUpload() {
         this.showUploadPopupFlag = false;
+       
+       }
+
+       openUploadPopup(jobId: number) {
+        this.showUploadPopupFlag = true;
+        this.resumeData.jobId = jobId; // Assign the jobId to the resumeData object
       }
-    
-      // saveUploadedResume(file: File) {
-      //   // Handle the uploaded file here
-      //   console.log(file);
-      //   this.showUploadPopupFlag = false;
-      // }
 
-      // saveResume(fileInput: any) {
-      //   const file: File = fileInput.files[0];
-      //   this.jobsint.uploadResume(file).subscribe(
-      //     response => {
-           
-      //       console.log('Resume uploaded successfully:', response);
-      //       alert("Resemue uploaded sucessfully")
-         
-      //     },
-        
-      //   );
-      // }
 
-      saveResume(fileInput: any) {
-        const file: File = fileInput.files[0];
+
+      onFileSelected(event: any) {
+        const file: File = event.target.files[0];
+        this.resumeData.resumeFile = file;
+      }
+
+      uploadResume() {
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('Name', this.resumeData.name);
+        formData.append('Email', this.resumeData.email);
+        formData.append('ResumeFile', this.resumeData.resumeFile);
       
-        this.http.post('https://localhost:7058/api/ResumeClass', formData).subscribe(
-          (response: any) => {
-            const resumeId = response.resumeId;
-            if (resumeId) {
-              console.log('Resume uploaded successfully. Resume ID:', resumeId);
-              alert("Resume uploaded successfully. Resume ID: " + resumeId);
-              this.downloadResume(resumeId);
-            } else {
-              console.error('Resume ID not found in the response.');
-              alert("Resume ID not found in the response. Please try again.");
-            }
-          },
-          (error: any) => {
-            console.error('Error uploading resume:', error);
-            alert("Error uploading resume. Please try again.");
-          }
-        );
-      }
+        const jobId = this.resumeData.jobId; // Get the jobId from resumeData
       
-      downloadResume(resumeId: number) {
-        if (resumeId) {
-          const url = `https://localhost:7058/api/ResumeClass/${resumeId}`;
-      
-          this.http.get(url, { responseType: 'blob' }).subscribe(
-            (response: Blob) => {
-              const downloadUrl = window.URL.createObjectURL(response);
-              const link = document.createElement('a');
-              link.href = downloadUrl;
-              link.download = `resume_${resumeId}.pdf`; // Replace with the appropriate file name and extension
-              link.click();
-              window.URL.revokeObjectURL(downloadUrl);
+        this.http.post(`https://localhost:7058/api/uploadsClass/${jobId}`, formData)
+          .subscribe(
+            response => {
+              // Handle the successful response
+              console.log('Resume uploaded successfully.');
+              this.cancelUpload(); // Close the upload popup
             },
-            (error: any) => {
-              console.error('Error downloading resume:', error);
-              alert('Error downloading resume. Please try again.');
+            error => {
+              // Handle the error
+              console.error('Error uploading resume:', error);
             }
           );
-        } else {
-          console.error('Invalid resumeId');
-          alert('Invalid resumeId. Please try again.');
-        }
-      
-  }
-}
+      }
+            
+
+  
+
+      downloadResume(jobId: number) {
+        const url = `https://localhost:7058/api/uploadsClass/${jobId}/Download`;
+    
+        this.http.get(url, { responseType: 'blob' })
+          .subscribe(
+            (response: Blob) => {
+              const blob = new Blob([response], { type: 'application/octet-stream' });
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = `resume_${jobId}.pdf`; // Provide a suitable filename here
+              link.click();
+              window.URL.revokeObjectURL(url);
+            },
+            error => {
+              console.error('Error downloading resume:', error);
+            }
+          );
+      }
+    }

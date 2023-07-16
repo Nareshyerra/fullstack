@@ -1,0 +1,25 @@
+<p>seperate works!</p>
+<table>
+    <thead>
+      <tr>
+        <th>Job ID</th>
+        <th>Job Title</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Resume</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let job of uploadedJobs">
+        <td>{{ job.jobId }}</td>
+        <td>{{ job.jobTitle }}</td>
+        <td>{{ job.name }}</td>
+        <td>{{ job.email }}</td>
+        <td>
+          <a [href]="'data:application/octet-stream;base64,' + job.fileData"
+             [download]="job.fileName">Download</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  

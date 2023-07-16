@@ -18,10 +18,9 @@ applyjobsurl = "https://localhost:7058/api/Applied/ApplyForJob";
 getappliedurl = "https://localhost:7058/api/Applied/AppliedJobs";
 
 
+resumesupload = "https://localhost:7058/api/Resumes"
 
 
-resumeuploadUrl="https://localhost:7058/api/ResumeClass";
-resumeget="https://localhost:7058/api/ResumeClass/8";
 
 
 //client jobs get method
@@ -58,11 +57,7 @@ getResume(id: number): Observable<any> {
   return this.http.get(url);
 }
 
-downloadResume(resumeId: number):  Observable<Blob>{
-  const resumeGetUrl = `${this.resumeuploadUrl}/${resumeId}`;
 
-    return this.http.get(resumeGetUrl, { responseType: 'blob' });
-}
 
 
 
@@ -72,12 +67,7 @@ deletemethod(jobId: number){
   return this.http.delete(deleteurl)
 }
 
-uploadResume(file: File): Observable<any> {
-  const formData = new FormData();
-  formData.append('file', file);
 
-  return this.http.post(this.resumeuploadUrl, formData);
-}
 
 
 
